@@ -1,0 +1,47 @@
+  version: "3"
+  services:
+    node1:
+      build: .
+      container_name: node1
+      hostname: node1
+      networks:
+        mpi-net:
+          ipv4_address: 172.28.1.1
+      volumes:
+        - ./src:/root/src
+      working_dir: /root/src
+      tty: true
+      stdin_open: true
+      environment:
+        - OMPI_ALLOW_RUN_AS_ROOT=1
+        - OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+        - NODE_ROLE=master
+      depends_on:
+        - node2
+      ports:
+        - "2221:22"
+
+    node2:
+      build: .
+      container_name: node2
+      hostname: node2
+      networks:
+        mpi-net:
+          ipv4_address: 172.28.1.2
+      volumes:
+        - ./src:/root/src
+      working_dir: /root/src
+      tty: true
+      stdin_open: true
+      environment:
+        - OMPI_ALLOW_RUN_AS_ROOT=1
+        - OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+        - NODE_ROLE=worker
+      ports:
+        - "2222:22"
+  networks:
+    mpi-net:
+      driver: bridge
+      ipam:
+        config:
+          - subnet: 172.28.0.0/16

@@ -1,5 +1,5 @@
 # To run via docker
-docker-compose up --build -d
+docker-compose up --build
 
 To alter slots for each node please modify ./src/hostfile file as desired. Additionally, WSL can also be configured to allocate more cores for VM.
 
